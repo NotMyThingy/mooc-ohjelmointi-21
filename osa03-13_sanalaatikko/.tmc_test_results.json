@@ -1,0 +1,1 @@
+[{"name": "test.test_sanalaatikko.SanalaatikkoTest.test_lyhyet_sanat", "status": "passed", "message": "", "passed": true, "points": ["3.sanalaatikko"], "backtrace": []}, {"name": "test.test_sanalaatikko.SanalaatikkoTest.test_pitkat_sanat", "status": "passed", "message": "", "passed": true, "points": ["3.sanalaatikko"], "backtrace": []}]
