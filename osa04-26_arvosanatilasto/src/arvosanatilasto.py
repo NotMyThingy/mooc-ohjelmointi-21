@@ -1,63 +1,81 @@
-# Kirjoita ratkaisu tähän
-def lue_syotteet():
-    syotteet = []
+from typing import List
+
+
+def lue_arvot():
+    arvot = []
     while True:
-        luvut = input('Koepisteet ja harjoitusten määrä: ')
-        if luvut == '':
+        luettu = input('Koepisteet ja harjoitusten määrä: ')
+        if luettu == '':
             break
+        arvot.append(luettu)
+    return arvot
 
-        syotteet.append(luvut)
-    return syotteet
 
-
-def laske_kokonaispisteet(syotteet: list):
-    kokonaispisteet = []
-    for rivi in syotteet:
-        arvot = rivi.split(' ')
-        koepisteet = int(arvot[0])
-        harjoitusten_lkm = int(arvot[1])
-        if koepisteet < 10:
-            kokonaispisteet.append(0)
+def muunna_pisteiksi(lista: list, indeksi: int, jaetaan: bool):
+    pisteet = []
+    for rivi in lista:
+        if jaetaan:
+            pisteet.append(int(rivi.split(' ')[indeksi]) // 10)
         else:
-            harjoituspisteet = harjoitus_pisteet(harjoitusten_lkm)
-            kokonaispisteet.append(koepisteet + harjoituspisteet)
-
-    return kokonaispisteet
-
-
-def harjoitus_pisteet(harjoitusten_lkm: int):
-    pisteet: int
-    if harjoitusten_lkm < 10:
-        pisteet = 0
-    elif harjoitusten_lkm < 20:
-        pisteet = 1
-    elif harjoitusten_lkm < 30:
-        pisteet = 2
-    elif harjoitusten_lkm < 40:
-        pisteet = 3
-    elif harjoitusten_lkm < 50:
-        pisteet = 4
-    elif harjoitusten_lkm < 60:
-        pisteet = 5
-    elif harjoitusten_lkm < 70:
-        pisteet = 6
-    elif harjoitusten_lkm < 80:
-        pisteet = 7
-    elif harjoitusten_lkm < 90:
-        pisteet = 8
-    elif harjoitusten_lkm < 100:
-        pisteet = 9
-    else:
-        pisteet = 10
-
+            pisteet.append(int(rivi.split(' ')[indeksi]))
     return pisteet
 
 
+def laske_arvosanajakauma(koepisteet: list, harjoituspisteet: list):
+    arvosanat = [0] * 6
+    for i in range(len(koepisteet)):
+        pisteet = koepisteet[i] + harjoituspisteet[i]
+        if koepisteet[i] < 10 or pisteet < 15:
+            arvosanat[0] += 1
+        elif pisteet < 18:
+            arvosanat[1] += 1
+        elif pisteet < 21:
+            arvosanat[2] += 1
+        elif pisteet < 24:
+            arvosanat[3] += 1
+        elif pisteet < 28:
+            arvosanat[4] += 1
+        elif pisteet < 31:
+            arvosanat[5] += 1
+        else:
+            print('Something extremely weird just happened...')
+    return arvosanat
+
+
+def laske_pisteiden_ka(koepisteet: list, harjotuspisteet: list):
+    summa = sum(koepisteet) + sum(harjotuspisteet)
+    return summa / len(koepisteet)
+
+
+def laske_hyvaksymisprosentti(arvosanat: list):
+    return sum(arvosanat[1:]) / sum(arvosanat) * 100
+
+
+############################################################
+#                                                          #
+#                       THE TILASTO                        #
+#                                                          #
+############################################################
+
+def tulosta_tilasto(koepisteet: list, harjoituspisteet: list, arvosanat: list):
+    ka = laske_pisteiden_ka(koepisteet, harjoituspisteet)
+    hy_prosentti = laske_hyvaksymisprosentti(arvosanat)
+    print('Tilasto:')
+    print(f'Pisteiden keskiarvo: {ka:.1f}')
+    print(f'Hyväksymisprosentti: {hy_prosentti:.1f}')
+    print('Arvosanajakauma:')
+    arvosana = 5
+    while arvosana >= 0:
+        print(f'{arvosana}: {arvosanat[arvosana] * "*"}')
+        arvosana -= 1
+
+
 def main():
-    syotteet = lue_syotteet()
-    print(syotteet)
-    kokonaispisteet = laske_kokonaispisteet(syotteet)
-    print(kokonaispisteet)
+    arvot = lue_arvot()
+    koepisteet = muunna_pisteiksi(arvot, 0, False)
+    harjoituspisteet = muunna_pisteiksi(arvot, 1, True)
+    arvosanat = laske_arvosanajakauma(koepisteet, harjoituspisteet)
+    tulosta_tilasto(koepisteet, harjoituspisteet, arvosanat)
 
 
 main()
