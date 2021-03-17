@@ -1,11 +1,13 @@
-# tee ratkaisu tänne
-def kertaa_kymmenen(alku: int, loppu: int):
-    luvut = {}
-    for luku in range(alku, loppu+1):
-        luvut[luku] = luku * 10
+def tuplaa_alkiot(luvut: list):
+    tmp = []
+    for alkio in luvut:
+        tmp.append(alkio*2)
 
-    return luvut
+    return tmp
 
 
-d = kertaa_kymmenen(3, 6)
-print(d)
+if __name__ == "__main__":
+    luvut = [2, 4, 5, 3, 11, -4]
+    tuplaluvut = tuplaa_alkiot(luvut)
+    print("alkuperäinen:", luvut)
+    print("tuplattu:", tuplaluvut)
