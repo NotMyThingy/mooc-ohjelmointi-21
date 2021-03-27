@@ -1,0 +1,1 @@
+[{"name": "test.test_spellchecker.SpellcheckerTest.test1_pysähtyy", "status": "passed", "message": "", "passed": true, "points": ["7.spellchecker_versio2"], "backtrace": []}, {"name": "test.test_spellchecker.SpellcheckerTest.test2_toimii", "status": "passed", "message": "", "passed": true, "points": ["7.spellchecker_versio2"], "backtrace": []}]
