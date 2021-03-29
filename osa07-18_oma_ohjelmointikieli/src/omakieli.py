@@ -1,5 +1,5 @@
 # tee ratkaisu tänne
-from string import ascii_uppercase as ascii, punctuation
+from string import ascii_lowercase, ascii_uppercase as ascii, digits
 
 
 def alusta_muuttujat():
@@ -9,77 +9,133 @@ def alusta_muuttujat():
     return muuttujat
 
 
+def lue_kohdat(ohjelma: list):
+    kohdat = {}
+    for rivi in range(len(ohjelma)):
+        osat = ohjelma[rivi].split(' ')
+        komento = osat[0]
+        if komento.endswith(':'):
+            komento = komento.replace(':', '')
+            kohdat[komento] = rivi
+
+    return kohdat
+
+
+def PRINT(muuttuja: str, muuttujat: dict, tulos: list):
+    if muuttuja in muuttujat:
+        tulos.append(muuttujat[muuttuja])
+    elif muuttuja in digits:
+        tulos.append(int(muuttuja))
+
+
+def MOV(muuttuja: str, arvo: str, muuttujat: dict):
+    if muuttuja in muuttujat:
+        if arvo in ascii:
+            muuttujat[muuttuja] = muuttujat[arvo]
+        else:
+            muuttujat[muuttuja] = int(arvo)
+
+
+def ADD(muuttuja: str, arvo, muuttujat: dict):
+    if muuttuja in muuttujat:
+        if(arvo in ascii):
+            muuttujat[muuttuja] += muuttujat[arvo]
+        elif arvo in digits:
+            muuttujat[muuttuja] += int(arvo)
+
+
+def SUB(muuttuja: str, arvo, muuttujat: dict):
+    if muuttuja in muuttujat:
+        if(arvo in ascii):
+            muuttujat[muuttuja] -= muuttujat[arvo]
+        elif arvo in digits:
+            muuttujat[muuttuja] -= int(arvo)
+
+
+def MUL(muuttuja: str, arvo, muuttujat: dict):
+    if muuttuja in muuttujat:
+        if(arvo in ascii):
+            muuttujat[muuttuja] *= muuttujat[arvo]
+        elif arvo in digits:
+            muuttujat[muuttuja] *= int(arvo)
+
+
+def JUMP(kohta: str, kohdat: dict):
+    global rivi
+    if kohta in kohdat:
+        rivi = kohdat[kohta]
+    else:
+        rivi += 1
+
+
+def IF(arvo1: str, arvo2: str, vertailu: str, kohta: str, muuttujat: dict, kohdat: dict):
+    a1 = int(arvo1) if arvo1.isnumeric() else muuttujat[arvo1]
+    a2 = int(arvo2) if arvo2.isnumeric() else muuttujat[arvo2]
+
+    osuma = False
+    if vertailu == '==':
+        if a1 == a2:
+            osuma = True
+    elif vertailu == '!=':
+        if a1 != a2:
+            osuma = True
+    elif vertailu == '<':
+        if a1 < a2:
+            osuma = True
+    elif vertailu == '<=':
+        if a1 <= a2:
+            osuma = True
+    elif vertailu == '>':
+        if a1 > a2:
+            osuma = True
+    elif vertailu == '>=':
+        if a1 >= a2:
+            osuma = True
+
+    if osuma:
+        JUMP(kohta, kohdat)
+
+
 def suorita(ohjelma: list):
+    global rivi
     muuttujat = alusta_muuttujat()
-    tulostettavat = []
-    kohta = {}
-    i = 0
-    while i < len(ohjelma):
-        print(i)
-        osat = ohjelma[i].split(' ')
+    kohdat = lue_kohdat(ohjelma)
+    tulos = []
+    rivi = 0
+    while rivi < len(ohjelma):
+        osat = ohjelma[rivi].split(' ')
         komento: str = osat[0]
         if komento == 'END':
             break
         elif komento == 'PRINT':
-            tulostettavat.append(muuttujat[osat[1]])
-            i += 1
+            PRINT(osat[1], muuttujat, tulos)
         elif komento == 'MOV':
-            muuttuja = osat[1]
-            arvo = int(osat[2])
-            muuttujat[muuttuja] = arvo
-            i += 1
+            MOV(osat[1], osat[2], muuttujat)
         elif komento == 'ADD':
-            muuttuja = osat[1]
-            arvo = osat[2]
-            if arvo.isdigit():
-                muuttujat[muuttuja] += int(arvo)
-            else:
-                muuttujat[muuttuja] += muuttujat[arvo]
-            i += 1
+            ADD(osat[1], osat[2], muuttujat)
         elif komento == 'SUB':
-            muuttuja = osat[1]
-            arvo = osat[2]
-            if arvo.isdigit():
-                muuttujat[muuttuja] -= int(arvo)
-            else:
-                muuttujat[muuttuja] -= muuttujat[arvo]
-            i += 1
+            SUB(osat[1], osat[2], muuttujat)
         elif komento == 'MUL':
-            muuttuja = osat[1]
-            arvo = osat[2]
-            if arvo.isdigit():
-                muuttujat[muuttuja] *= int(arvo)
-            else:
-                muuttujat[muuttuja] *= muuttujat[arvo]
-            i += 1
-        elif komento.islower():
-            i += 1
-            kohta[komento] = i
-            print(i)
-            print(kohta)
+            MUL(osat[1], osat[2], muuttujat)
         elif komento == 'JUMP':
-            indeksi = osat[1]
-            if indeksi in kohta:
-                i = kohta[indeksi]
+            JUMP(osat[1], kohdat)
         elif komento == 'IF':
-            arvo1 = osat[1]
-            arvo2 = osat[3]
-            if arvo1 osat[2] arvo2
+            IF(osat[1], osat[3], osat[2], osat[5], muuttujat, kohdat)
+        rivi += 1
 
-    return tulostettavat
+    return tulos
 
 
 if __name__ == '__main__':
-    alusta_muuttujat()
-    ohjelma1 = []
-    ohjelma1.append("MOV A 1")
-    ohjelma1.append("MOV B 2")
-    ohjelma1.append("alku:")
-    ohjelma1.append("PRINT A")
-    ohjelma1.append("PRINT B")
-    ohjelma1.append("ADD A B")
-    ohjelma1.append("MUL A B")
-    ohjelma1.append("PRINT A")
-    ohjelma1.append("END")
-    tulos = suorita(ohjelma1)
+    # testi koodia
+    ohjelma3 = []
+    ohjelma3.append("MOV A 1")
+    ohjelma3.append("MOV B 1")
+    ohjelma3.append("alku:")
+    ohjelma3.append("PRINT A")
+    ohjelma3.append("ADD B 1")
+    ohjelma3.append("MUL A B")
+    ohjelma3.append("IF B <= 10 JUMP alku")
+    ohjelma3.append("END")
+    tulos = suorita(ohjelma3)
     print(tulos)
