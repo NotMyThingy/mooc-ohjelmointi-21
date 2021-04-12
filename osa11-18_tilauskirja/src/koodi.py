@@ -45,12 +45,10 @@ class Tilauskirja:
         return list(set([t.koodari for t in self.tehtavat]))
 
     def merkkaa_valmiiksi(self, id: int):
-        for tehtava in self.tehtavat:
-            if tehtava.id == id:
-                tehtava.merkkaa_valmiiksi()
-                return
-        
-        raise ValueError('id ei kelpaa')
+        try:
+            [t for t in self.tehtavat if t.id == id][0].merkkaa_valmiiksi()
+        except:
+            raise ValueError('id ei kelpaa')
 
     def koodarin_status(self, koodari: str):
         if koodari not in self.koodarit():
