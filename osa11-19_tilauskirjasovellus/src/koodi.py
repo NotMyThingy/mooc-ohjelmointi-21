@@ -80,14 +80,10 @@ class Sovellus:
         print('6 koodarin status')
 
     def lisaa_uusi_tehtava(self):
-        try:
-            kuvaus = input('kuvaus: ')
-            koodari, tyomaara = input('koodari ja työmääräarvio: ').split(' ')
-            self.tilauskirja.lisaa_tilaus(kuvaus, koodari, int(tyomaara))
-        except:
-            print('virheellinen syöte\n')
-            print('komento: 1')
-            self.lisaa_uusi_tehtava()
+        kuvaus = input('kuvaus: ')
+        koodari, tyomaara = input('koodari ja työmääräarvio: ').split(' ')
+        self.tilauskirja.lisaa_tilaus(kuvaus, koodari, int(tyomaara))
+        print('lisätty!')
 
     def listaa_valmiit(self):
         valmiit = self.tilauskirja.valmiit_tilaukset()
@@ -127,21 +123,25 @@ class Sovellus:
             komento = input('komento: ')
             if komento == '0':
                 break
+            try:
+                if komento == '1':
+                    self.lisaa_uusi_tehtava()
+                elif komento == '2':
+                    self.listaa_valmiit()
+                elif komento == '3':
+                    self.listaa_ei_valmiit()
+                elif komento == '4':
+                    self.merkitse_valmiiksi()
+                elif komento == '5':
+                    self.tulosta_koodarit()
+                elif komento == '6':
+                    self.tulosta_koodarin_status()
+                else:
+                    self.menu()
+            except:
+                print('virheellinen syöte')
+                continue
 
-            if komento == '1':
-                self.lisaa_uusi_tehtava()
-            elif komento == '2':
-                self.listaa_valmiit()
-            elif komento == '3':
-                self.listaa_ei_valmiit()
-            elif komento == '4':
-                self.merkitse_valmiiksi()
-            elif komento == '5':
-                self.tulosta_koodarit()
-            elif komento == '6':
-                self.tulosta_koodarin_status()
 
-
-if __name__ == "__main__":
-    s = Sovellus()
-    s.suorita()
+s = Sovellus()
+s.suorita()
