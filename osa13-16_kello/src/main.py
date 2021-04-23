@@ -1,37 +1,39 @@
 import pygame
-import time
 import math
+from datetime import datetime
 
 pygame.init()
 display = pygame.display.set_mode((640, 480))
-display_time = ''
 
-angle_sec = 270 * 0.0174533
-angle_min = 240 * 0.0174533
-angle_hour = 140.1 * 0.0174533
-clock = pygame.time.Clock()
+
+def circle(color: tuple, radius: int, thickness: int = 0):
+    pygame.draw.circle(display, color, (320, 240), radius, thickness)
+
+
+def pointer(length: int, thickness: int, division: float):
+    angle = 2 * math.pi * division - math.pi / 2
+    x = 320 + math.cos(angle) * length
+    y = 240 + math.sin(angle) * length
+
+    pygame.draw.line(display, (0, 0, 225), (320, 240), (x, y), thickness)
+
 
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             exit()
 
-    sec_x = 319 + math.cos(angle_sec) * 190
-    sec_y = 240 + math.sin(angle_sec) * 190
-    min_x = 318 + math.cos(angle_min) * 185
-    min_y = 240 + math.sin(angle_min) * 185
-    hour_x = 316 + math.cos(angle_hour) * 175
-    hour_y = 240 + math.sin(angle_hour) * 175
+    hh = datetime.now().hour % 12
+    mm = datetime.now().minute
+    ss = datetime.now().second
 
-    pygame.draw.rect(display, (0, 0, 0), (0, 0, 640, 480))
-    pygame.draw.circle(display, (255, 0, 0), (320, 240), 200, 5)
-    pygame.draw.line(display, (0, 0, 255), (319, 240), (sec_x, sec_y), 1)
-    pygame.draw.line(display, (0, 0, 255), (318, 240), (min_x, min_y), 2)
-    pygame.draw.line(display, (0, 0, 255), (316, 240), (hour_x, hour_y), 4)
-    pygame.draw.circle(display, (255, 0, 0), (320, 240), 10)
+    display.fill((0, 0, 0))
+
+    circle((255, 0, 0), 200, 5)
+    pointer(190, 1, ss / 60)
+    pointer(180, 2, (mm + ss / 60) / 60)
+    pointer(150, 6, (hh + mm / 60 + ss / 3600) / 12)
+    circle((255, 0, 0), 10, )
+
+    pygame.display.set_caption(str(datetime.now().time())[:8])
     pygame.display.flip()
-
-    angle_sec += 0.104719755
-    angle_min += 0.001745329
-    angle_hour += 
-    clock.tick(1)
